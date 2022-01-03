@@ -3,25 +3,25 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { HeroSearchComponent } from '../hero-search/hero-search.component';
-import { HeroService } from '../hero.service';
-import { HEROES } from '../mock-heroes';
+import { ProductService } from '../product.service';
+import { PRODUCTS } from '../mock-products';
 
 import { DashboardComponent } from './dashboard.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-  let heroService;
-  let getHeroesSpy: jasmine.Spy;
+  let productService;
+  let getProductsSpy: jasmine.Spy;
 
   beforeEach(waitForAsync(() => {
-    heroService = jasmine.createSpyObj('HeroService', ['getHeroes']);
-    getHeroesSpy = heroService.getHeroes.and.returnValue(of(HEROES));
+    productService = jasmine.createSpyObj('ProductService', ['getProducts']);
+    getProductsSpy = productService.getProducts.and.returnValue(of(PRODUCTS));
     TestBed
         .configureTestingModule({
           declarations: [DashboardComponent, HeroSearchComponent],
           imports: [RouterTestingModule.withRoutes([])],
-          providers: [{provide: HeroService, useValue: heroService}]
+          providers: [{provide: ProductService, useValue: productService}]
         })
         .compileComponents();
   }));
@@ -36,12 +36,12 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display "Top Heroes" as headline', () => {
-    expect(fixture.nativeElement.querySelector('h2').textContent).toEqual('Top Heroes');
+  it('should display "Top Productos" as headline', () => {
+    expect(fixture.nativeElement.querySelector('h2').textContent).toEqual('Top Productos');
   });
 
-  it('should call heroService', waitForAsync(() => {
-       expect(getHeroesSpy.calls.any()).toBe(true);
+  it('should call productService', waitForAsync(() => {
+       expect(getProductsSpy.calls.any()).toBe(true);
      }));
 
   it('should display 4 links', waitForAsync(() => {
