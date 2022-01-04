@@ -16,11 +16,11 @@ export class ProductsComponent implements OnInit {
 
   defaultPotionFilter: ProductFilter = {
     name: '',
-    inventoryStatus: ''
+    category: ''
   };
   productFilter!: ProductFilter;
 
-  inventoryStatusOptions = ['INSTOCK', 'LOWSTOCK', 'OUTOFSTOCK'];
+  categoryOptions = ['Monovolumen', 'SUV', 'Turismo', 'Deportivo', 'Berlina', 'Pick-up'];
 
   constructor(private productService: ProductService, private router: Router) {
     this.resetFilter();
@@ -58,6 +58,10 @@ export class ProductsComponent implements OnInit {
   clear(): void {
     this.resetFilter();
     this.getProducts();
+  }
+
+  getInventoryStatus(product: Product): string {
+    return this.productService.getInventoryStatus(product);
   }
 
   private resetFilter(): void {

@@ -5,7 +5,6 @@ export interface Product {
   description: string;
   price: number;
   quantity: number;
-  inventoryStatus: string;
   category: string;
   image: string;
   rating: number;
@@ -13,5 +12,5 @@ export interface Product {
 
 export interface ProductFilter {
   name: string;
-  inventoryStatus: string;
+  category: string;
 }

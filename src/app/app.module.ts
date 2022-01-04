@@ -7,7 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { RatingModule } from 'primeng/rating';
@@ -32,7 +35,10 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     HttpClientModule,
     ToolbarModule,
     ButtonModule,
+    RadioButtonModule,
     InputTextModule,
+    InputTextareaModule,
+    InputNumberModule,
     DropdownModule,
     TableModule,
     RatingModule,

@@ -36,8 +36,8 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display "Top Productos" as headline', () => {
-    expect(fixture.nativeElement.querySelector('h2').textContent).toEqual('Top Productos');
+  it('should display "Top Coches" as headline', () => {
+    expect(fixture.nativeElement.querySelector('h2').textContent).toEqual('Top Coches');
   });
 
   it('should call productService', waitForAsync(() => {

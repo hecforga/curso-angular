@@ -31,7 +31,7 @@ export class ProductService {
             if (filter.name && !product.name.toLowerCase().includes(filter.name.toLowerCase())) {
               return false;
             }
-            if (filter.inventoryStatus && product.inventoryStatus !== filter.inventoryStatus) {
+            if (filter.category && product.category !== filter.category) {
               return false;
             }
             return true;
@@ -57,6 +57,16 @@ export class ProductService {
     return this.http.get<Product>(url).pipe(
       catchError(this.handleError<Product>(`getProduct id=${id}`))
     );
+  }
+
+  getInventoryStatus(product: Product): string {
+    if (product.quantity < 1) {
+      return 'OUTOFSTOCK';
+    }
+    if (product.quantity < 10) {
+      return 'LOWSTOCK'
+    }
+    return 'INSTOCK';
   }
 
   /* GET products whose name contains search term */

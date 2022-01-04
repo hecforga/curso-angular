@@ -1,58 +1,70 @@
-<h2>Mis productos</h2>
+<h2>Coches</h2>
 
 <div class="card">
-    <p-toolbar styleClass="p-mb-4">
-        <ng-template pTemplate="left">
-            <button pButton pRipple label="Eliminar selección" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
-        </ng-template>
-    </p-toolbar>
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <button pButton pRipple label="Eliminar selección" icon="pi pi-trash" class="p-button-danger"
+        (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+    </ng-template>
+  </p-toolbar>
 
-    <p-table [value]="products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']"
-        [(selection)]="selectedProducts" [rowHover]="true" dataKey="id"
-        currentPageReportTemplate="{first} - {last} de {totalRecords} productos" [showCurrentPageReport]="true">
-        <ng-template pTemplate="caption">
-            <form class="p-d-flex p-ai-center p-jc-between" autocomplete="off">
-                <h5 class="p-m-0">Filtros</h5>
-                <div class="p-formgroup-inline">
-                  <div class="p-field p-mr-2">
-                    <input pInputText type="text" name="name" [(ngModel)]="productFilter.name" placeholder="Buscar por nombre" />
-                  </div>
-                  <div class="p-field p-mr-4">
-                    <p-dropdown [options]="inventoryStatusOptions" [(ngModel)]="productFilter.inventoryStatus" placeholder="Buscar por tipo"></p-dropdown>
-                  </div>
-                  <button pButton pRipple label="Filtrar" class="p-button p-mr-2" (click)="filter()"></button>
-                  <button pButton pRipple label="Limpiar" class="p-button-secondary" (click)="clear()"></button>
-                </div>
-            </form>
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr>
-                <th style="width: 3rem">
-                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                </th>
-                <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
-                <th pSortableColumn="price">Precio <p-sortIcon field="price"></p-sortIcon></th>
-                <th pSortableColumn="category">Categoría <p-sortIcon field="category"></p-sortIcon></th>
-                <th pSortableColumn="rating">Valoración <p-sortIcon field="rating"></p-sortIcon></th>
-                <th pSortableColumn="inventoryStatus">Estado <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
-                <th></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-product>
-            <tr>
-                <td>
-                    <p-tableCheckbox [value]="product"></p-tableCheckbox>
-                </td>
-                <td>{{product.name}}</td>
-                <td>{{product.price | currency:'EUR'}}</td>
-                <td>{{product.category}}</td>
-                <td><p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating></td>
-                <td><span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span></td>
-                <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="edit(product)"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="delete(product)"></button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+  <p-table [value]="products" [rows]="10" [paginator]="true" [(selection)]="selectedProducts" [rowHover]="true"
+    dataKey="id" currentPageReportTemplate="{first} - {last} de {totalRecords} coches" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <form class="p-d-flex p-ai-center p-jc-between" autocomplete="off">
+        <h5 class="p-m-0">Filtros</h5>
+        <div class="p-formgroup-inline">
+          <div class="p-field p-mr-2">
+            <input pInputText type="text" name="name" [(ngModel)]="productFilter.name"
+              placeholder="Buscar por nombre" />
+          </div>
+          <div class="p-field p-mr-4">
+            <p-dropdown [options]="categoryOptions" [(ngModel)]="productFilter.category"
+              placeholder="Buscar por categoría"></p-dropdown>
+          </div>
+          <button pButton pRipple label="Limpiar" class="p-button-secondary p-mr-2" (click)="clear()"></button>
+          <button pButton pRipple label="Filtrar" class="p-button" (click)="filter()"></button>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="price">Precio <p-sortIcon field="price"></p-sortIcon>
+        </th>
+        <th pSortableColumn="category">Categoría <p-sortIcon field="category"></p-sortIcon>
+        </th>
+        <th pSortableColumn="rating">Valoración <p-sortIcon field="rating"></p-sortIcon>
+        </th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="product"></p-tableCheckbox>
+        </td>
+        <td>{{product.name}}</td>
+        <td>{{product.price | currency:'EUR'}}</td>
+        <td>{{product.category}}</td>
+        <td>
+          <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+        </td>
+        <td><span
+            [class]="'product-badge status-' + getInventoryStatus(product).toLowerCase()">{{getInventoryStatus(product)}}</span>
+        </td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            (click)="edit(product)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+            (click)="delete(product)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

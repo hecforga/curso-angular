@@ -1,10 +1,63 @@
 <div *ngIf="product">
-  <h2>{{product.name | uppercase}} Details</h2>
-  <div><span>id: </span>{{product.id}}</div>
-  <div>
-    <label for="product-name">Nombre: </label>
-    <input id="product-name" [(ngModel)]="product.name" placeholder="Nombre"/>
+  <h2>Producto {{product.id}}</h2>
+
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="name">Nombre</label>
+      <input type="text" pInputText id="name" [(ngModel)]="product.name" autofocus />
+    </div>
+    <div class="p-field">
+      <label for="description">Descripción</label>
+      <textarea id="description" pInputTextarea [(ngModel)]="product.description" rows="3" cols="20"></textarea>
+    </div>
+
+    <div class="p-field">
+      <label class="p-mb-3">Categoría</label>
+      <div class="p-formgrid p-grid">
+        <div class="p-field-radiobutton p-col-6">
+          <p-radioButton id="category1" name="category" value="Monovolumen" [(ngModel)]="product.category"></p-radioButton>
+          <label for="category1">Monovolumen</label>
+        </div>
+        <div class="p-field-radiobutton p-col-6">
+          <p-radioButton id="category2" name="category" value="SUV" [(ngModel)]="product.category"></p-radioButton>
+          <label for="category2">SUV</label>
+        </div>
+        <div class="p-field-radiobutton p-col-6">
+          <p-radioButton id="category3" name="category" value="Turismo" [(ngModel)]="product.category"></p-radioButton>
+          <label for="category3">Turismo</label>
+        </div>
+        <div class="p-field-radiobutton p-col-6">
+          <p-radioButton id="category4" name="category" value="Deportivo" [(ngModel)]="product.category"></p-radioButton>
+          <label for="category4">Deportivo</label>
+        </div>
+        <div class="p-field-radiobutton p-col-6">
+          <p-radioButton id="category4" name="category" value="Berlina" [(ngModel)]="product.category"></p-radioButton>
+          <label for="category4">Berlina</label>
+        </div>
+        <div class="p-field-radiobutton p-col-6">
+          <p-radioButton id="category4" name="category" value="Pick-up" [(ngModel)]="product.category"></p-radioButton>
+          <label for="category4">Pick-up</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <label for="rating">Valoración</label>
+      <p-rating [(ngModel)]="product.rating"></p-rating>
+    </div>
+
+    <div class="p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="price">Precio</label>
+        <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="EUR" locale="es-ES"></p-inputNumber>
+      </div>
+      <div class="p-field p-col">
+        <label for="quantity">Cantidad</label>
+        <p-inputNumber id="quantity" [(ngModel)]="product.quantity"></p-inputNumber>
+      </div>
+    </div>
   </div>
-  <button (click)="goBack()">Volver</button>
-  <button (click)="save()">Guardar</button>
+
+  <button pButton pRipple label="Volver" icon="pi pi-times" class="p-button-secondary p-mr-2" (click)="goBack()"></button>
+  <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button" (click)="save()"></button>
 </div>
