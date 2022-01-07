@@ -1,0 +1,66 @@
+<div *ngIf="product">
+  <h2>Producto {{product.id}}</h2>
+
+  <form name="editForm" role="form" novalidate [formGroup]="editForm" (ngSubmit)="save()">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="name">Nombre</label>
+        <input type="text" pInputText id="name" formControlName="name" autofocus />
+      </div>
+      <div class="p-field">
+        <label for="description">Descripción</label>
+        <textarea id="description" pInputTextarea formControlName="description" rows="3" cols="20"></textarea>
+      </div>
+
+      <div class="p-field">
+        <label class="p-mb-3">Categoría</label>
+        <div class="p-formgrid p-grid">
+          <div class="p-field-radiobutton p-col-6">
+            <p-radioButton id="category1" name="category" value="Monovolumen" formControlName="category">
+            </p-radioButton>
+            <label for="category1">Monovolumen</label>
+          </div>
+          <div class="p-field-radiobutton p-col-6">
+            <p-radioButton id="category2" name="category" value="SUV" formControlName="category"></p-radioButton>
+            <label for="category2">SUV</label>
+          </div>
+          <div class="p-field-radiobutton p-col-6">
+            <p-radioButton id="category3" name="category" value="Turismo" formControlName="category"></p-radioButton>
+            <label for="category3">Turismo</label>
+          </div>
+          <div class="p-field-radiobutton p-col-6">
+            <p-radioButton id="category4" name="category" value="Deportivo" formControlName="category"></p-radioButton>
+            <label for="category4">Deportivo</label>
+          </div>
+          <div class="p-field-radiobutton p-col-6">
+            <p-radioButton id="category4" name="category" value="Berlina" formControlName="category"></p-radioButton>
+            <label for="category4">Berlina</label>
+          </div>
+          <div class="p-field-radiobutton p-col-6">
+            <p-radioButton id="category4" name="category" value="Pick-up" formControlName="category"></p-radioButton>
+            <label for="category4">Pick-up</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-field">
+        <label for="rating">Valoración</label>
+        <p-rating formControlName="rating"></p-rating>
+      </div>
+
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="price">Precio</label>
+          <p-inputNumber id="price" formControlName="price" mode="currency" currency="EUR" locale="es-ES"></p-inputNumber>
+        </div>
+        <div class="p-field p-col">
+          <label for="quantity">Cantidad</label>
+          <p-inputNumber id="quantity" formControlName="quantity"></p-inputNumber>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" pButton pRipple label="Volver" icon="pi pi-times" class="p-button-secondary p-mr-2" (click)="goBack()"></button>
+    <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button"></button>
+  </form>
+</div>

@@ -3,7 +3,7 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
@@ -23,6 +23,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ProductDetailReactiveComponent } from './product-detail-reactive/product-detail-reactive.component';
 import { ProductsComponent } from './products/products.component';
 import { HeroSearchComponent } from './hero-search/hero-search.component';
 
@@ -31,6 +32,7 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     ToolbarModule,
@@ -54,6 +56,7 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     DashboardComponent,
     ProductsComponent,
     ProductDetailComponent,
+    ProductDetailReactiveComponent,
     HeroSearchComponent
   ],
   providers: [

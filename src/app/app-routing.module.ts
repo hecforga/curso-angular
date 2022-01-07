@@ -4,11 +4,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductsComponent } from './products/products.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ProductDetailReactiveComponent } from './product-detail-reactive/product-detail-reactive.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'detail/:id', component: ProductDetailComponent },
+  { path: 'detail-reactive/:id', component: ProductDetailReactiveComponent },
   { path: 'products', component: ProductsComponent }
 ];
 

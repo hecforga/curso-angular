@@ -19,7 +19,7 @@
               placeholder="Buscar por nombre" />
           </div>
           <div class="p-field p-mr-4">
-            <p-dropdown [options]="categoryOptions" [(ngModel)]="productFilter.category"
+            <p-dropdown [options]="categoryOptions" name="category" [(ngModel)]="productFilter.category"
               placeholder="Buscar por categoría"></p-dropdown>
           </div>
           <button pButton pRipple label="Limpiar" class="p-button-secondary p-mr-2" (click)="clear()"></button>
@@ -53,7 +53,7 @@
         <td>{{product.price | currency:'EUR'}}</td>
         <td>{{product.category}}</td>
         <td>
-          <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+          <p-rating name="rating" [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
         </td>
         <td><span
             [class]="'product-badge status-' + getInventoryStatus(product).toLowerCase()">{{getInventoryStatus(product)}}</span>
