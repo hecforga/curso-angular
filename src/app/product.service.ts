@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LazyLoadEvent } from 'primeng/api';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -19,7 +20,7 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   /** GET products from the server */
-  getProducts(filter?: ProductFilter): Observable<Product[]> {
+  getProducts(lazyLoadEvent?: LazyLoadEvent, filter?: ProductFilter): Observable<Product[]> {
     return this.http.get<Product[]>(this.productsUrl)
       .pipe(
         map(products => (
@@ -37,6 +38,22 @@ export class ProductService {
             return true;
           })
         )),
+        map(products => {
+          if (!lazyLoadEvent) {
+            return products;
+          }
+          const auxProducts = [...products];
+          auxProducts.sort((a, b) => {
+            if ((a as Record<string, any>)[lazyLoadEvent.sortField!] > (b as Record<string, any>)[lazyLoadEvent.sortField!]) {
+              return lazyLoadEvent.sortOrder!;
+            }
+            if ((a as Record<string, any>)[lazyLoadEvent.sortField!] < (b as Record<string, any>)[lazyLoadEvent.sortField!]) {
+              return -1 * lazyLoadEvent.sortOrder!;
+            }
+            return 0;
+          });
+          return auxProducts.slice(lazyLoadEvent.first, lazyLoadEvent.first! + lazyLoadEvent.rows!);
+        }),
         catchError(this.handleError<Product[]>('getProducts', []))
       );
   }

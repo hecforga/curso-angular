@@ -1,18 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LazyLoadEvent } from 'primeng/api';
 
 import { Product, ProductFilter } from '../product';
 import { ProductService } from '../product.service';
+import { PRODUCTS } from '../mock-products';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent {
   products: Product[] = [];
 
   selectedProducts: Product[] = [];
+
+  totalRecords = PRODUCTS.length;
+  lazyLoadEvent!: LazyLoadEvent;
 
   defaultPotionFilter: ProductFilter = {
     name: '',
@@ -26,12 +31,13 @@ export class ProductsComponent implements OnInit {
     this.resetFilter();
   }
 
-  ngOnInit(): void {
+  loadProducts(event: LazyLoadEvent) {
+    this.lazyLoadEvent = event;
     this.getProducts();
   }
 
   getProducts(): void {
-    this.productService.getProducts(this.productFilter)
+    this.productService.getProducts(this.lazyLoadEvent, this.productFilter)
       .subscribe(products => this.products = products);
   }
 
