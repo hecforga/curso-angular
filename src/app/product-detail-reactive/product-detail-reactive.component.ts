@@ -16,7 +16,7 @@ export class ProductDetailReactiveComponent implements OnInit {
 
   editForm = this.fb.group({
     name: [],
-    description: [],
+    description: [{ value: undefined, disabled: true }],
     category: [],
     rating: [],
     price: [],
@@ -32,15 +32,8 @@ export class ProductDetailReactiveComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProduct();
-  }
 
-  getProduct(): void {
-    const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
-    this.productService.getProduct(id)
-      .subscribe(product => {
-        this.product = product;
-        this.updateForm(product);
-      });
+    this.manageNameChanges();
   }
 
   goBack(): void {
@@ -48,11 +41,19 @@ export class ProductDetailReactiveComponent implements OnInit {
   }
 
   save(): void {
-    console.log('save');
     if (this.product) {
       this.productService.updateProduct(this.createFromForm())
         .subscribe(() => this.goBack());
     }
+  }
+
+  private getProduct(): void {
+    const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
+    this.productService.getProduct(id)
+      .subscribe(product => {
+        this.product = product;
+        this.updateForm(product);
+      });
   }
 
   private updateForm(product: Product): void {
@@ -63,6 +64,19 @@ export class ProductDetailReactiveComponent implements OnInit {
       rating: product.rating,
       price: product.price,
       quantity: product.quantity,
+    });
+  }
+
+  private manageNameChanges() {
+    this.editForm.get(['name'])!.valueChanges.subscribe((value) => {
+      if (value) {
+        this.editForm.get(['description'])!.enable();
+      } else {
+        this.editForm.get(['description'])!.disable();
+        this.editForm.patchValue({
+          description: undefined,
+        });
+      }
     });
   }
 

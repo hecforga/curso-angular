@@ -14,6 +14,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { RatingModule } from 'primeng/rating';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ColorPickerModule } from 'primeng/colorpicker';
+import { SliderModule } from 'primeng/slider';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
@@ -44,6 +48,10 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     DropdownModule,
     TableModule,
     RatingModule,
+    AutoCompleteModule,
+    ColorPickerModule,
+    SliderModule,
+    MultiSelectModule,
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
     // Remove it when a real server is ready to receive requests.

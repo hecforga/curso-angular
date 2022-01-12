@@ -13,43 +13,42 @@
 
     <div class="p-field">
       <label class="p-mb-3">Categoría</label>
-      <div class="p-formgrid p-grid">
-        <div class="p-field-radiobutton p-col-6">
-          <p-radioButton id="category1" name="category" value="Monovolumen" [(ngModel)]="product.category"></p-radioButton>
-          <label for="category1">Monovolumen</label>
-        </div>
-        <div class="p-field-radiobutton p-col-6">
-          <p-radioButton id="category2" name="category" value="SUV" [(ngModel)]="product.category"></p-radioButton>
-          <label for="category2">SUV</label>
-        </div>
-        <div class="p-field-radiobutton p-col-6">
-          <p-radioButton id="category3" name="category" value="Turismo" [(ngModel)]="product.category"></p-radioButton>
-          <label for="category3">Turismo</label>
-        </div>
-        <div class="p-field-radiobutton p-col-6">
-          <p-radioButton id="category4" name="category" value="Deportivo" [(ngModel)]="product.category"></p-radioButton>
-          <label for="category4">Deportivo</label>
-        </div>
-        <div class="p-field-radiobutton p-col-6">
-          <p-radioButton id="category4" name="category" value="Berlina" [(ngModel)]="product.category"></p-radioButton>
-          <label for="category4">Berlina</label>
-        </div>
-        <div class="p-field-radiobutton p-col-6">
-          <p-radioButton id="category4" name="category" value="Pick-up" [(ngModel)]="product.category"></p-radioButton>
-          <label for="category4">Pick-up</label>
-        </div>
-      </div>
+      <p-autoComplete [(ngModel)]="product.category" [suggestions]="filteredCategoryOptions"
+        (completeMethod)="filterCategory($event.query)" [dropdown]="true" [forceSelection]="true">
+      </p-autoComplete>
     </div>
 
     <div class="p-field">
-      <label for="rating">Valoración</label>
-      <p-rating [(ngModel)]="product.rating"></p-rating>
+      <label class="p-mb-3">Extras</label>
+      <p-multiSelect [options]="extrasOptions" [(ngModel)]="product.extras" optionLabel="name" filterBy="name" display="chip"></p-multiSelect>
+    </div>
+
+    <div class="p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="rating" class="p-mb-3">Valoración: <span>{{ product.rating }}</span></label>
+        <p-slider id="rating" [(ngModel)]="product.rating" [min]="0" [max]="5"></p-slider>
+      </div>
+      <div class="p-field p-col">
+        <label for="color" class="p-mb-3">Color</label>
+        <div>
+          <button *ngIf="!product.color" pButton pRipple label="Añadir color" icon="pi pi-plus-circle" class="p-button-secondary" (click)="addColor()"></button>
+          <div class="p-grid p-justify-between" *ngIf="product.color">
+            <div class="p-col-fixed">
+              <p-colorPicker id="color" [(ngModel)]="product.color"></p-colorPicker>
+            </div>
+            <div class="p-col-fixed">
+              <button pButton pRipple label="Quitar color" icon="pi pi-times" class="p-button-secondary" style="width: 'auto'" (click)="removeColor()"></button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="p-formgrid p-grid">
       <div class="p-field p-col">
         <label for="price">Precio</label>
-        <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="EUR" locale="es-ES"></p-inputNumber>
+        <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="EUR" locale="es-ES">
+        </p-inputNumber>
       </div>
       <div class="p-field p-col">
         <label for="quantity">Cantidad</label>
@@ -58,6 +57,7 @@
     </div>
   </div>
 
-  <button pButton pRipple label="Volver" icon="pi pi-times" class="p-button-secondary p-mr-2" (click)="goBack()"></button>
+  <button pButton pRipple label="Volver" icon="pi pi-times" class="p-button-secondary p-mr-2"
+    (click)="goBack()"></button>
   <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button" (click)="save()"></button>
 </div>

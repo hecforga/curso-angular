@@ -8,6 +8,8 @@ export interface Product {
   category: string;
   image: string;
   rating: number;
+  extras: string[];
+  color?: string;
 }
 
 export interface ProductFilter {
