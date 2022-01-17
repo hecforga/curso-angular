@@ -1,63 +1,70 @@
 <div *ngIf="product">
   <h2>Producto {{product.id}}</h2>
 
-  <div class="p-fluid">
-    <div class="p-field">
-      <label for="name">Nombre</label>
-      <input type="text" pInputText id="name" [(ngModel)]="product.name" autofocus />
-    </div>
-    <div class="p-field">
-      <label for="description">Descripción</label>
-      <textarea id="description" pInputTextarea [(ngModel)]="product.description" rows="3" cols="20"></textarea>
-    </div>
-
-    <div class="p-field">
-      <label class="p-mb-3">Categoría</label>
-      <p-autoComplete [(ngModel)]="product.category" [suggestions]="filteredCategoryOptions"
-        (completeMethod)="filterCategory($event.query)" [dropdown]="true" [forceSelection]="true">
-      </p-autoComplete>
-    </div>
-
-    <div class="p-field">
-      <label class="p-mb-3">Extras</label>
-      <p-multiSelect [options]="extrasOptions" [(ngModel)]="product.extras" optionLabel="name" filterBy="name" display="chip"></p-multiSelect>
-    </div>
-
-    <div class="p-formgrid p-grid">
-      <div class="p-field p-col">
-        <label for="rating" class="p-mb-3">Valoración: <span>{{ product.rating }}</span></label>
-        <p-slider id="rating" [(ngModel)]="product.rating" [min]="0" [max]="5"></p-slider>
+  <form name="editForm" #editForm="ngForm">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="name">Nombre</label>
+        <input type="text" pInputText id="name" name="name" [(ngModel)]="product.name" autofocus required />
+        <div *ngIf="editForm.controls['name'] && editForm.controls['name'].invalid">
+          <small class="form-text text-danger" *ngIf="editForm.controls['name']!.errors!['required']">
+            Este campo es obligatorio.
+          </small>
+        </div>
       </div>
-      <div class="p-field p-col">
-        <label for="color" class="p-mb-3">Color</label>
-        <div>
-          <button *ngIf="!product.color" pButton pRipple label="Añadir color" icon="pi pi-plus-circle" class="p-button-secondary" (click)="addColor()"></button>
-          <div class="p-grid p-justify-between" *ngIf="product.color">
-            <div class="p-col-fixed">
-              <p-colorPicker id="color" [(ngModel)]="product.color"></p-colorPicker>
-            </div>
-            <div class="p-col-fixed">
-              <button pButton pRipple label="Quitar color" icon="pi pi-times" class="p-button-secondary" style="width: 'auto'" (click)="removeColor()"></button>
+      <div class="p-field">
+        <label for="description">Descripción</label>
+        <textarea id="description" pInputTextarea name="description" [(ngModel)]="product.description" rows="3" cols="20"></textarea>
+      </div>
+
+      <div class="p-field">
+        <label class="p-mb-3">Categoría</label>
+        <p-autoComplete name="category" [(ngModel)]="product.category" [suggestions]="filteredCategoryOptions"
+          (completeMethod)="filterCategory($event.query)" [dropdown]="true" [forceSelection]="true">
+        </p-autoComplete>
+      </div>
+
+      <div class="p-field">
+        <label class="p-mb-3">Extras</label>
+        <p-multiSelect [options]="extrasOptions" name="extras" [(ngModel)]="product.extras" optionLabel="name" filterBy="name" display="chip"></p-multiSelect>
+      </div>
+
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="rating" class="p-mb-3">Valoración: <span>{{ product.rating }}</span></label>
+          <p-slider id="rating" name="rating" [(ngModel)]="product.rating" [min]="0" [max]="5"></p-slider>
+        </div>
+        <div class="p-field p-col">
+          <label for="color" class="p-mb-3">Color</label>
+          <div>
+            <button *ngIf="!product.color" pButton pRipple label="Añadir color" icon="pi pi-plus-circle" class="p-button-secondary" (click)="addColor()"></button>
+            <div class="p-grid p-justify-between" *ngIf="product.color">
+              <div class="p-col-fixed">
+                <p-colorPicker id="color" name="color" [(ngModel)]="product.color"></p-colorPicker>
+              </div>
+              <div class="p-col-fixed">
+                <button pButton pRipple label="Quitar color" icon="pi pi-times" class="p-button-secondary" style="width: 'auto'" (click)="removeColor()"></button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="price">Precio</label>
+          <p-inputNumber id="price" name="price" [(ngModel)]="product.price" mode="currency" currency="EUR" locale="es-ES">
+          </p-inputNumber>
+        </div>
+        <div class="p-field p-col">
+          <label for="quantity">Cantidad</label>
+          <p-inputNumber id="quantity" name="quantity" [(ngModel)]="product.quantity"></p-inputNumber>
+        </div>
+      </div>
     </div>
 
-    <div class="p-formgrid p-grid">
-      <div class="p-field p-col">
-        <label for="price">Precio</label>
-        <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="EUR" locale="es-ES">
-        </p-inputNumber>
-      </div>
-      <div class="p-field p-col">
-        <label for="quantity">Cantidad</label>
-        <p-inputNumber id="quantity" [(ngModel)]="product.quantity"></p-inputNumber>
-      </div>
-    </div>
-  </div>
-
-  <button pButton pRipple label="Volver" icon="pi pi-times" class="p-button-secondary p-mr-2"
-    (click)="goBack()"></button>
-  <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button" (click)="save()"></button>
+    <button pButton pRipple label="Volver" icon="pi pi-times" class="p-button-secondary p-mr-2"
+      (click)="goBack()"></button>
+    <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button" (click)="save()" [disabled]="editForm.invalid"></button>
+  </form>
 </div>

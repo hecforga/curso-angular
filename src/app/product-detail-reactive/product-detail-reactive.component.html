@@ -1,15 +1,49 @@
 <div *ngIf="product">
   <h2>Producto {{product.id}}</h2>
 
-  <form name="editForm" role="form" novalidate [formGroup]="editForm" (ngSubmit)="save()">
+  <form name="editForm" role="form" novalidate autocomplete="off" [formGroup]="editForm" (ngSubmit)="save()">
     <div class="p-fluid">
-      <div class="p-field">
-        <label for="name">Nombre</label>
-        <input type="text" pInputText id="name" formControlName="name" autofocus />
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="code">Código</label>
+          <input type="text" pInputText id="code" formControlName="code" autofocus />
+          <div *ngIf="editForm.get('code')!.invalid">
+            <small class="form-text text-danger" *ngIf="editForm.get('code')?.errors!['required']">
+              Este campo es obligatorio.
+            </small>
+          </div>
+          <div *ngIf="editForm.errors !== null">
+            <small class="form-text text-danger" *ngIf="editForm.errors!['codeAndNameMatch']">
+              El código y el nombre no pueden coincidir.
+            </small>
+          </div>
+        </div>
+
+        <div class="p-field p-col">
+          <label for="name">Nombre</label>
+          <input type="text" pInputText id="name" formControlName="name" autofocus />
+          <div *ngIf="editForm.get('name')!.invalid">
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors!['required']">
+              Este campo es obligatorio.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors!['forbiddenName']">
+              Este campo no puede contener "Bob".
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors!['uniqueName']">
+              Este nombre ya está siendo utilizado en otro coche.
+            </small>
+          </div>
+        </div>
       </div>
+
       <div class="p-field">
         <label for="description">Descripción</label>
         <textarea id="description" pInputTextarea formControlName="description" rows="3" cols="20"></textarea>
+        <div *ngIf="editForm.get('description')!.invalid">
+          <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors!['pattern']">
+            Este campo solo puede contener letras (sin tildes), espacios, guiones y puntos.
+          </small>
+        </div>
       </div>
 
       <div class="p-field">
@@ -60,7 +94,16 @@
       </div>
     </div>
 
+    <div class="p-field">
+      <p-toggleButton formControlName="accept" [onLabel]="'Acepto los términos'" [offLabel]="'Rechazo los términos'" [style]="{'width': '20em'}"></p-toggleButton>
+      <div *ngIf="editForm.get('accept')!.invalid">
+        <small class="form-text text-danger" *ngIf="editForm.get('accept')?.errors!['required']">
+          Debe aceptar los términos y condiciones.
+        </small>
+      </div>
+    </div>
+
     <button type="button" pButton pRipple label="Volver" icon="pi pi-times" class="p-button-secondary p-mr-2" (click)="goBack()"></button>
-    <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button"></button>
+    <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button" [disabled]="editForm.invalid"></button>
   </form>
 </div>

@@ -10,6 +10,7 @@ export interface Product {
   rating: number;
   extras: string[];
   color?: string;
+  accept?: boolean;
 }
 
 export interface ProductFilter {

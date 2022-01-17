@@ -36,7 +36,7 @@ export class ProductsComponent implements OnInit {
   }
 
   edit(product: Product): void {
-    this.router.navigate(['detail', product.id]);
+    this.router.navigate(['detail-reactive', product.id]);
   }
 
   delete(product: Product): void {

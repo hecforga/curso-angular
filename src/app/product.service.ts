@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -102,6 +101,19 @@ export class ProductService {
   updateProduct(product: Product): Observable<any> {
     return this.http.put(this.productsUrl, product, this.httpOptions).pipe(
       catchError(this.handleError<any>('updateProduct'))
+    );
+  }
+
+  isNameTaken(name: string, product: Product): Observable<boolean> {
+    return this.getProducts().pipe(
+      map((products) => {
+        if (!product) {
+          return products;
+        }
+        return products.filter((p) => p.id !== product.id);
+      }),
+      map((products) => products.filter((p) => p.name === name)),
+      map((products) => products.length > 0)
     );
   }
 

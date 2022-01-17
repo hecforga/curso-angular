@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
+import { forbiddenNameValidator, codeAndNameMatchValidator, validateIsNameTaken } from '../common/helpers/validators';
 
 @Component({
   selector: 'app-product-detail-reactive',
@@ -15,13 +16,15 @@ export class ProductDetailReactiveComponent implements OnInit {
   product!: Product;
 
   editForm = this.fb.group({
-    name: [],
-    description: [{ value: undefined, disabled: true }],
+    code: [undefined, [Validators.required]],
+    name: [undefined, [Validators.required, forbiddenNameValidator(/bob/i)]],
+    description: [{ value: undefined, disabled: true }, [Validators.pattern('[a-zA-Z \-.]*')]],
     category: [],
     rating: [],
-    price: [],
-    quantity: [],
-  });
+    price: [undefined, [Validators.min(10000), Validators.max(20000)]],
+    quantity: [undefined, [Validators.min(0), Validators.max(100)]],
+    accept: [false, [Validators.requiredTrue]],
+  }, { validators: codeAndNameMatchValidator });
 
   constructor(
     private route: ActivatedRoute,
@@ -53,17 +56,21 @@ export class ProductDetailReactiveComponent implements OnInit {
       .subscribe(product => {
         this.product = product;
         this.updateForm(product);
+
+        this.editForm.get(['name'])!.addAsyncValidators(validateIsNameTaken(this.product, this.productService));
       });
   }
 
   private updateForm(product: Product): void {
     this.editForm.patchValue({
+      code: product.code,
       name: product.name,
       description: product.description,
       category: product.category,
       rating: product.rating,
       price: product.price,
       quantity: product.quantity,
+      accept: product.accept,
     });
   }
 
@@ -83,12 +90,14 @@ export class ProductDetailReactiveComponent implements OnInit {
   private createFromForm(): Product {
     return {
       ...this.product,
+      code: this.editForm.get(['code'])!.value,
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
       category: this.editForm.get(['category'])!.value,
       rating: this.editForm.get(['rating'])!.value,
       price: this.editForm.get(['price'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
+      accept: this.editForm.get(['accept'])!.value,
     };
   }
 }
