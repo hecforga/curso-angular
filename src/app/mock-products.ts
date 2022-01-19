@@ -1,6 +1,6 @@
-import { Product } from './product';
+import { ProductFromServer } from './product';
 
-export const PRODUCTS: Product[] = [
+export const PRODUCTS: ProductFromServer[] = [
   {
     id: 1000,
     code: "b-max",
@@ -11,7 +11,7 @@ export const PRODUCTS: Product[] = [
     category: "Monovolumen",
     quantity: 24,
     rating: 4,
-    extras: []
+    extras: ''
   },
   {
     id: 1001,
@@ -23,7 +23,7 @@ export const PRODUCTS: Product[] = [
     category: "Monovolumen",
     quantity: 61,
     rating: 4,
-    extras: []
+    extras: ''
   },
   {
     id: 1002,
@@ -35,7 +35,7 @@ export const PRODUCTS: Product[] = [
     category: "SUV",
     quantity: 2,
     rating: 4,
-    extras: []
+    extras: ''
   },
   {
     id: 1003,
@@ -47,7 +47,7 @@ export const PRODUCTS: Product[] = [
     category: "SUV",
     quantity: 25,
     rating: 5,
-    extras: []
+    extras: ''
   },
   {
     id: 1004,
@@ -59,7 +59,7 @@ export const PRODUCTS: Product[] = [
     category: "SUV",
     quantity: 73,
     rating: 5,
-    extras: []
+    extras: ''
   },
   {
     id: 1005,
@@ -71,7 +71,7 @@ export const PRODUCTS: Product[] = [
     category: "Turismo",
     quantity: 0,
     rating: 4,
-    extras: []
+    extras: ''
   },
   {
     id: 1006,
@@ -83,7 +83,7 @@ export const PRODUCTS: Product[] = [
     category: "Turismo",
     quantity: 5,
     rating: 5,
-    extras: []
+    extras: ''
   },
   {
     id: 1007,
@@ -95,7 +95,7 @@ export const PRODUCTS: Product[] = [
     category: "Monovolumen",
     quantity: 23,
     rating: 4,
-    extras: []
+    extras: ''
   },
   {
     id: 1008,
@@ -107,7 +107,7 @@ export const PRODUCTS: Product[] = [
     category: "Deportivo",
     quantity: 2,
     rating: 5,
-    extras: []
+    extras: ''
   },
   {
     id: 1009,
@@ -119,7 +119,7 @@ export const PRODUCTS: Product[] = [
     category: "Urbano",
     quantity: 63,
     rating: 4,
-    extras: []
+    extras: ''
   },
   {
     id: 1010,
@@ -131,7 +131,7 @@ export const PRODUCTS: Product[] = [
     category: "SUV",
     quantity: 0,
     rating: 4,
-    extras: []
+    extras: ''
   },
   {
     id: 1011,
@@ -143,7 +143,7 @@ export const PRODUCTS: Product[] = [
     category: "Berlina",
     quantity: 23,
     rating: 4,
-    extras: []
+    extras: ''
   },
   {
     id: 1012,
@@ -155,7 +155,7 @@ export const PRODUCTS: Product[] = [
     category: "Deportivo",
     quantity: 74,
     rating: 5,
-    extras: []
+    extras: ''
   },
   {
     id: 1013,
@@ -167,7 +167,7 @@ export const PRODUCTS: Product[] = [
     category: "SUV",
     quantity: 0,
     rating: 5,
-    extras: []
+    extras: ''
   },
   {
     id: 1014,
@@ -179,7 +179,7 @@ export const PRODUCTS: Product[] = [
     category: "Pick-up",
     quantity: 8,
     rating: 5,
-    extras: []
+    extras: ''
   },
   {
     id: 1015,
@@ -191,6 +191,6 @@ export const PRODUCTS: Product[] = [
     category: "Monovolumen",
     quantity: 34,
     rating: 5,
-    extras: []
+    extras: ''
   }
 ];

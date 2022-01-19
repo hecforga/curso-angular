@@ -53,8 +53,13 @@ export class ProductDetailComponent implements OnInit {
 
   save(): void {
     if (this.product) {
-      this.productService.updateProduct(this.product)
-        .subscribe(() => this.goBack());
+      if (this.product.id) {
+        this.productService.updateProduct(this.product)
+          .subscribe(() => this.goBack());
+      } else {
+        this.productService.addProduct(this.product)
+          .subscribe(() => this.goBack());
+      }
     }
   }
 

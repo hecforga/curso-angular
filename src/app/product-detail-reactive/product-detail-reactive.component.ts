@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
+import * as moment from 'moment';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
@@ -19,6 +20,7 @@ export class ProductDetailReactiveComponent implements OnInit {
     code: [undefined, [Validators.required]],
     name: [undefined, [Validators.required, forbiddenNameValidator(/bob/i)]],
     description: [{ value: undefined, disabled: true }, [Validators.pattern('[a-zA-Z \-.]*')]],
+    expiryDate: [],
     category: [],
     rating: [],
     price: [undefined, [Validators.min(10000), Validators.max(20000)]],
@@ -66,6 +68,7 @@ export class ProductDetailReactiveComponent implements OnInit {
       code: product.code,
       name: product.name,
       description: product.description,
+      expiryDate: product.expiryDate?.toDate(),
       category: product.category,
       rating: product.rating,
       price: product.price,
@@ -98,6 +101,7 @@ export class ProductDetailReactiveComponent implements OnInit {
       price: this.editForm.get(['price'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
       accept: this.editForm.get(['accept'])!.value,
+      expiryDate: this.editForm.get(['expiryDate'])!.value ? moment(this.editForm.get(['expiryDate'])!.value) : undefined,
     };
   }
 }

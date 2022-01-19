@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import * as moment from 'moment';
 
-import { Product, ProductFilter } from './product';
+import { Product, ProductFromServer, ProductFilter } from './product';
 
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
 
-  private productsUrl = 'api/products';  // URL to web api
+  private productsUrl = 'http://localhost:8080/api/products';  // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -19,23 +20,17 @@ export class ProductService {
 
   /** GET products from the server */
   getProducts(filter?: ProductFilter): Observable<Product[]> {
-    return this.http.get<Product[]>(this.productsUrl)
-      .pipe(
-        map(products => (
-          products.filter(product => {
-            if (!filter) {
-              return true;
-            }
+    let params = new HttpParams();
+    if (filter && filter.name) {
+      params = params.set('name.contains', filter.name);
+    }
+    if (filter && filter.category) {
+      params = params.set('category.equals', filter.category);
+    }
 
-            if (filter.name && !product.name.toLowerCase().includes(filter.name.toLowerCase())) {
-              return false;
-            }
-            if (filter.category && product.category !== filter.category) {
-              return false;
-            }
-            return true;
-          })
-        )),
+    return this.http.get<ProductFromServer[]>(this.productsUrl, { params })
+      .pipe(
+        map(products => products.map(product => this.convertFromServer(product))),
         catchError(this.handleError<Product[]>('getProducts', []))
       );
   }
@@ -53,7 +48,8 @@ export class ProductService {
   /** GET product by id. Will 404 if id not found */
   getProduct(id: number): Observable<Product> {
     const url = `${this.productsUrl}/${id}`;
-    return this.http.get<Product>(url).pipe(
+    return this.http.get<ProductFromServer>(url).pipe(
+      map((product) => this.convertFromServer(product)),
       catchError(this.handleError<Product>(`getProduct id=${id}`))
     );
   }
@@ -83,24 +79,28 @@ export class ProductService {
 
   /** POST: add a new product to the server */
   addProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.productsUrl, product, this.httpOptions).pipe(
+    const productFromServer = this.convertFromClient(product);
+    return this.http.post<ProductFromServer>(this.productsUrl, productFromServer, this.httpOptions).pipe(
+      map((p) => this.convertFromServer(p)),
       catchError(this.handleError<Product>('addProduct'))
     );
   }
 
   /** DELETE: delete the product from the server */
-  deleteProduct(id: number): Observable<Product> {
+  deleteProduct(id: number): Observable<{}> {
     const url = `${this.productsUrl}/${id}`;
 
-    return this.http.delete<Product>(url, this.httpOptions).pipe(
-      catchError(this.handleError<Product>('deleteProduct'))
+    return this.http.delete(url, this.httpOptions).pipe(
+      catchError(this.handleError<{}>('deleteProduct'))
     );
   }
 
   /** PUT: update the product on the server */
-  updateProduct(product: Product): Observable<any> {
-    return this.http.put(this.productsUrl, product, this.httpOptions).pipe(
-      catchError(this.handleError<any>('updateProduct'))
+  updateProduct(product: Product): Observable<Product> {
+    const productFromServer = this.convertFromClient(product);
+    return this.http.put<ProductFromServer>(`${this.productsUrl}/${product.id}`, productFromServer, this.httpOptions).pipe(
+      map((p) => this.convertFromServer(p)),
+      catchError(this.handleError<Product>('updateProduct'))
     );
   }
 
@@ -131,6 +131,22 @@ export class ProductService {
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
+    };
+  }
+
+  private convertFromServer(product: ProductFromServer): Product {
+    return {
+      ...product,
+      extras: product.extras ? product.extras.split(',') : [],
+      expiryDate: product.expiryDate ? moment(product.expiryDate) : undefined,
+    };
+  }
+
+  private convertFromClient(product: Product): ProductFromServer {
+    return {
+      ...product,
+      extras: product.extras.join(','),
+      expiryDate: product.expiryDate ? product.expiryDate.toJSON() : undefined,
     };
   }
 }
