@@ -55,10 +55,10 @@ export class ProductService {
   }
 
   getInventoryStatus(product: Product): string {
-    if (product.quantity < 1) {
+    if (product.quantity! < 1) {
       return 'OUTOFSTOCK';
     }
-    if (product.quantity < 10) {
+    if (product.quantity! < 10) {
       return 'LOWSTOCK'
     }
     return 'INSTOCK';

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import * as moment from 'moment';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
+import { JhiDataUtils } from '../data-util.service';
 import { forbiddenNameValidator, codeAndNameMatchValidator, validateIsNameTaken } from '../common/helpers/validators';
 
 @Component({
@@ -19,12 +20,14 @@ export class ProductDetailReactiveComponent implements OnInit {
   editForm = this.fb.group({
     code: [undefined, [Validators.required]],
     name: [undefined, [Validators.required, forbiddenNameValidator(/bob/i)]],
-    description: [{ value: undefined, disabled: true }, [Validators.pattern('[a-zA-Z \-.]*')]],
+    description: [undefined, [Validators.required, Validators.pattern('[a-zA-Z \-.]*')]],
     expiryDate: [],
-    category: [],
-    rating: [],
-    price: [undefined, [Validators.min(10000), Validators.max(20000)]],
-    quantity: [undefined, [Validators.min(0), Validators.max(100)]],
+    category: [undefined, [Validators.required]],
+    rating: [undefined, [Validators.required]],
+    price: [undefined, [Validators.required, Validators.min(10000), Validators.max(20000)]],
+    quantity: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
+    image: [null, [Validators.required]],
+    imageContentType: [],
     accept: [false, [Validators.requiredTrue]],
   }, { validators: codeAndNameMatchValidator });
 
@@ -32,7 +35,9 @@ export class ProductDetailReactiveComponent implements OnInit {
     private route: ActivatedRoute,
     private productService: ProductService,
     private location: Location,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private elementRef: ElementRef,
+    private dataUtils: JhiDataUtils
   ) {}
 
   ngOnInit(): void {
@@ -41,26 +46,41 @@ export class ProductDetailReactiveComponent implements OnInit {
     this.manageNameChanges();
   }
 
+  setFileData(event: any, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe();
+  }
+
+  clearInputImage(field: string, fieldContentType: string, idInput: string): void {
+    this.editForm.patchValue({
+      [field]: null,
+      [fieldContentType]: null,
+    });
+    if (this.elementRef && idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
+      this.elementRef.nativeElement.querySelector('#' + idInput).value = null;
+    }
+  }
+
   goBack(): void {
     this.location.back();
   }
 
   save(): void {
-    if (this.product) {
+    if (this.product.id) {
       this.productService.updateProduct(this.createFromForm())
-        .subscribe(() => this.goBack());
+        .subscribe((product) => this.manageSaveResponse(product));
+    } else {
+      this.productService.addProduct(this.createFromForm())
+        .subscribe((product) => this.manageSaveResponse(product));
     }
   }
 
   private getProduct(): void {
-    const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
-    this.productService.getProduct(id)
-      .subscribe(product => {
-        this.product = product;
-        this.updateForm(product);
+    this.route.data.subscribe(({ product }) => {
+      this.product = product;
+      this.updateForm(product);
 
-        this.editForm.get(['name'])!.addAsyncValidators(validateIsNameTaken(this.product, this.productService));
-      });
+      this.editForm.get(['name'])!.addAsyncValidators(validateIsNameTaken(this.product, this.productService));
+    });
   }
 
   private updateForm(product: Product): void {
@@ -73,11 +93,17 @@ export class ProductDetailReactiveComponent implements OnInit {
       rating: product.rating,
       price: product.price,
       quantity: product.quantity,
+      image: product.image,
+      imageContentType: product.imageContentType,
       accept: product.accept,
     });
   }
 
   private manageNameChanges() {
+    if (!this.editForm.get(['name'])!.value) {
+      this.editForm.get(['description'])!.disable();
+    }
+
     this.editForm.get(['name'])!.valueChanges.subscribe((value) => {
       if (value) {
         this.editForm.get(['description'])!.enable();
@@ -97,11 +123,19 @@ export class ProductDetailReactiveComponent implements OnInit {
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
       category: this.editForm.get(['category'])!.value,
+      image: this.editForm.get(['image'])!.value,
+      imageContentType: this.editForm.get(['imageContentType'])!.value,
       rating: this.editForm.get(['rating'])!.value,
       price: this.editForm.get(['price'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
       accept: this.editForm.get(['accept'])!.value,
       expiryDate: this.editForm.get(['expiryDate'])!.value ? moment(this.editForm.get(['expiryDate'])!.value) : undefined,
     };
+  }
+
+  private manageSaveResponse(product: Product): void {
+    if (product) {
+      this.goBack();
+    }
   }
 }

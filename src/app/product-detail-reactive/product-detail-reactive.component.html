@@ -5,9 +5,9 @@
     <div class="p-fluid">
       <div class="p-formgrid p-grid">
         <div class="p-field p-col">
-          <label for="code">Código</label>
+          <label for="code">Código*</label>
           <input type="text" pInputText id="code" formControlName="code" autofocus />
-          <div *ngIf="editForm.get('code')!.invalid">
+          <div *ngIf="editForm.get('code')!.invalid && (editForm.get('code')!.dirty || editForm.get('code')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('code')?.errors!['required']">
               Este campo es obligatorio.
             </small>
@@ -20,9 +20,9 @@
         </div>
 
         <div class="p-field p-col">
-          <label for="name">Nombre</label>
+          <label for="name">Nombre*</label>
           <input type="text" pInputText id="name" formControlName="name" autofocus />
-          <div *ngIf="editForm.get('name')!.invalid">
+          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors!['required']">
               Este campo es obligatorio.
             </small>
@@ -37,9 +37,12 @@
       </div>
 
       <div class="p-field">
-        <label for="description">Descripción</label>
+        <label for="description">Descripción*</label>
         <textarea id="description" pInputTextarea formControlName="description" rows="3" cols="20"></textarea>
-        <div *ngIf="editForm.get('description')!.invalid">
+        <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors!['required']">
+            Este campo es obligatorio.
+          </small>
           <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors!['pattern']">
             Este campo solo puede contener letras (sin tildes), espacios, guiones y puntos.
           </small>
@@ -52,7 +55,7 @@
       </div>
 
       <div class="p-field">
-        <label class="p-mb-3">Categoría</label>
+        <label class="p-mb-3">Categoría*</label>
         <div class="p-formgrid p-grid">
           <div class="p-field-radiobutton p-col-6">
             <p-radioButton id="category1" name="category" value="Monovolumen" formControlName="category">
@@ -83,25 +86,61 @@
       </div>
 
       <div class="p-field">
-        <label for="rating">Valoración</label>
+        <label for="rating">Valoración*</label>
         <p-rating formControlName="rating"></p-rating>
+        <div
+          *ngIf="editForm.get('rating')!.invalid && (editForm.get('rating')!.dirty || editForm.get('rating')!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get('rating')?.errors!['required']">
+            Este campo es obligatorio.
+          </small>
+        </div>
       </div>
 
       <div class="p-formgrid p-grid">
         <div class="p-field p-col">
-          <label for="price">Precio</label>
+          <label for="price">Precio*</label>
           <p-inputNumber id="price" formControlName="price" mode="currency" currency="EUR" locale="es-ES"></p-inputNumber>
+          <div
+            *ngIf="editForm.get('price')!.invalid && (editForm.get('price')!.dirty || editForm.get('price')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('price')?.errors!['required']">
+              Este campo es obligatorio.
+            </small>
+          </div>
         </div>
         <div class="p-field p-col">
-          <label for="quantity">Cantidad</label>
+          <label for="quantity">Cantidad*</label>
           <p-inputNumber id="quantity" formControlName="quantity"></p-inputNumber>
+          <div
+            *ngIf="editForm.get('quantity')!.invalid && (editForm.get('quantity')!.dirty || editForm.get('quantity')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('quantity')?.errors!['required']">
+              Este campo es obligatorio.
+            </small>
+          </div>
         </div>
       </div>
     </div>
 
+    <div class="p-formgrid p-grid">
+      <div class="p-field p-col-6" style="height: 100%">
+        <div class="image-label">
+          <label for="image">Imagen*</label>
+          <div>
+            <button *ngIf="editForm.get('image')!.value" type="button" pButton pRipple label="Borrar imagen" class="p-button-secondary" (click)="clearInputImage('image', 'imageContentType', 'file_image')"></button>
+            <button *ngIf="!editForm.get('image')!.value" type="button" pButton pRipple label="Añadir imagen" class="p-button-secondary" (click)="imageInput.click()"></button>
+          </div>
+        </div>
+        <div class="centered-container px-4 py-3">
+          <img [src]="editForm.get('image')!.value ? 'data:' + editForm.get('imageContentType')!.value + ';base64,' + editForm.get('image')!.value : './assets/default_image.png'" class="contain" alt="image" />
+        </div>
+        <input hidden type="file" #imageInput id="file_image" (change)="setFileData($event, 'image', true)" accept="image/*" />
+        <input type="hidden" name="image" id="image" formControlName="image" />
+        <input type="hidden" name="imageContentType" id="imageContentType" formControlName="imageContentType" />
+      </div>
+    </div>
+
     <div class="p-field">
-      <p-toggleButton formControlName="accept" [onLabel]="'Acepto los términos'" [offLabel]="'Rechazo los términos'" [style]="{'width': '20em'}"></p-toggleButton>
-      <div *ngIf="editForm.get('accept')!.invalid">
+      <p-toggleButton formControlName="accept" [onLabel]="'Acepto los términos'" [offLabel]="'Rechazo los términos*'" [style]="{'width': '20em'}"></p-toggleButton>
+      <div *ngIf="editForm.get('accept')!.invalid && (editForm.get('accept')!.dirty || editForm.get('accept')!.touched)">
         <small class="form-text text-danger" *ngIf="editForm.get('accept')?.errors!['required']">
           Debe aceptar los términos y condiciones.
         </small>

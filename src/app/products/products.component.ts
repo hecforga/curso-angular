@@ -41,7 +41,11 @@ export class ProductsComponent implements OnInit {
 
   delete(product: Product): void {
     this.products = this.products.filter(h => h !== product);
-    this.productService.deleteProduct(product.id).subscribe();
+    this.productService.deleteProduct(product.id!).subscribe();
+  }
+
+  create(): void {
+    this.router.navigate(['new']);
   }
 
   deleteSelectedProducts(): void {
