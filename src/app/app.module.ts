@@ -20,6 +20,10 @@ import { SliderModule } from 'primeng/slider';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { CalendarModule } from 'primeng/calendar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { ConfirmationService } from 'primeng/api';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -52,7 +56,10 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     SliderModule,
     MultiSelectModule,
     ToggleButtonModule,
-    CalendarModule
+    CalendarModule,
+    ConfirmDialogModule,
+    ConfirmPopupModule,
+    TabMenuModule,
   ],
   declarations: [
     AppComponent,
@@ -66,7 +73,8 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     {
       provide: LOCALE_ID,
       useValue: 'es'
-    }
+    },
+    ConfirmationService
   ],
   bootstrap: [ AppComponent ]
 })

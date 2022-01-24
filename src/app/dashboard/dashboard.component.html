@@ -1,7 +1,7 @@
 <h2>Top Coches</h2>
 <div class="products-menu">
   <a *ngFor="let product of products"
-      routerLink="/detail/{{product.id}}">
+      routerLink="/products/detail/{{product.id}}">
       {{product.name}}
   </a>
 </div>

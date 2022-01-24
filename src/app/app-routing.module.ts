@@ -36,16 +36,16 @@ export class ProductResolve implements Resolve<Product> {
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'detail/:id', component: ProductDetailComponent },
+  { path: 'products/detail/:id', component: ProductDetailComponent },
   {
-    path: 'detail-reactive/:id',
+    path: 'products/detail-reactive/:id',
     component: ProductDetailReactiveComponent,
     resolve: {
       product: ProductResolve,
     },
   },
   {
-    path: 'new',
+    path: 'products/new',
     component: ProductDetailReactiveComponent,
     resolve: {
       product: ProductResolve,

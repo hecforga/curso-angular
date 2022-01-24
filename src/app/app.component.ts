@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PrimeNGConfig } from 'primeng/api';
+import { MenuItem, PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +9,29 @@ import { PrimeNGConfig } from 'primeng/api';
 export class AppComponent implements OnInit {
   title = 'Curso Angular';
 
+  items: MenuItem[] = [
+    {
+      label: 'Inicio',
+      icon: 'pi pi-fw pi-home',
+      routerLink: 'dashboard',
+    },
+    {
+      label: 'Coches',
+      icon: 'pi pi-fw pi-car',
+      routerLink: 'products',
+    },
+  ];
+  activeItem = this.items[0];
+
   constructor(private config: PrimeNGConfig) { }
 
-    ngOnInit() {
-        this.config.setTranslation({
-          monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
-          emptyMessage: 'Sin resultados',
-          emptyFilterMessage: 'Sin resultados',
-        });
-    }
+  ngOnInit() {
+    this.config.setTranslation({
+      monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+      emptyMessage: 'Sin resultados',
+      emptyFilterMessage: 'Sin resultados',
+      accept: 'Sí',
+      reject: 'No',
+    });
+  }
 }
