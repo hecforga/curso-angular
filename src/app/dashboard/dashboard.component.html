@@ -6,4 +6,24 @@
   </a>
 </div>
 
+<div *ngIf="chartData && chartOptions" class="p-mt-3">
+  <p-chart [type]="chartType" [data]="chartData" [options]="chartOptions"></p-chart>
+</div>
+
+<div class="p-mt-3">
+  <div echarts [options]="options"></div>
+</div>
+
+<div class="p-mt-3" style="display: flex; justify-content: center">
+  <div style="width: 100%; max-width: 600px; min-height: 300px">
+    <ngx-charts-gauge
+      [scheme]="colorScheme"
+      [results]="data"
+      [legend]="legend"
+      [legendPosition]="legendPosition"
+      >
+    </ngx-charts-gauge>
+  </div>
+</div>
+
 <!-- <app-hero-search></app-hero-search> -->

@@ -23,7 +23,10 @@ import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { ChartModule } from 'primeng/chart';
 import { ConfirmationService } from 'primeng/api';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -60,6 +63,11 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     ConfirmDialogModule,
     ConfirmPopupModule,
     TabMenuModule,
+    ChartModule,
+    NgxChartsModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })
   ],
   declarations: [
     AppComponent,
