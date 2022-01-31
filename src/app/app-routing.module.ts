@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductsComponent } from './products/products.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductDetailReactiveComponent } from './product-detail-reactive/product-detail-reactive.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @Injectable({ providedIn: 'root' })
 export class ProductResolve implements Resolve<Product> {
@@ -51,7 +52,8 @@ const routes: Routes = [
       product: ProductResolve,
     },
   },
-  { path: 'products', component: ProductsComponent }
+  { path: 'products', component: ProductsComponent },
+  { path: 'calendar', component: CalendarComponent },
 ];
 
 @NgModule({

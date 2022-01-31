@@ -1,0 +1,5 @@
+<h2>Calendario</h2>
+
+<app-calendar-toolbar [createEventDisabled]="isCreateButtonDisabled()" (createEventClicked)="createEvent()"></app-calendar-toolbar>
+
+<full-calendar #calendar [options]="calendarOptions"></full-calendar>

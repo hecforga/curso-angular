@@ -20,6 +20,11 @@ export class AppComponent implements OnInit {
       icon: 'pi pi-fw pi-car',
       routerLink: 'products',
     },
+    {
+      label: 'Calendario',
+      icon: 'pi pi-fw pi-calendar',
+      routerLink: 'calendar',
+    },
   ];
   activeItem = this.items[0];
 

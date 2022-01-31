@@ -24,6 +24,11 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ConfirmationService } from 'primeng/api';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin  from '@fullcalendar/list';
+import interactionPlugin from '@fullcalendar/interaction';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -32,7 +37,16 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductDetailReactiveComponent } from './product-detail-reactive/product-detail-reactive.component';
 import { ProductsComponent } from './products/products.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarToolbarComponent } from './calendar/calendar-toolbar.component';
 import { HeroSearchComponent } from './hero-search/hero-search.component';
+
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  timeGridPlugin,
+  listPlugin,
+  interactionPlugin
+]);
 
 @NgModule({
   imports: [
@@ -60,6 +74,7 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     ConfirmDialogModule,
     ConfirmPopupModule,
     TabMenuModule,
+    FullCalendarModule,
   ],
   declarations: [
     AppComponent,
@@ -67,6 +82,8 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     ProductsComponent,
     ProductDetailComponent,
     ProductDetailReactiveComponent,
+    CalendarComponent,
+    CalendarToolbarComponent,
     HeroSearchComponent
   ],
   providers: [

@@ -1,0 +1,6 @@
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <button pButton pRipple label="Crear evento" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="onCreateEventButtonClick()" [disabled]="createEventDisabled"></button>
+    <p-dropdown [options]="calendarViewOptions" [ngModel]="getCalendarView() | async" (ngModelChange)="onCalendarViewChange($event)" placeholder="Vista de calendario"></p-dropdown>
+  </ng-template>
+</p-toolbar>
