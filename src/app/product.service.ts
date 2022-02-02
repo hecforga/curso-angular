@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import * as moment from 'moment';
+import { LazyLoadEvent } from 'primeng/api';
 
 import { Product, ProductFromServer, ProductFilter } from './product';
 
@@ -19,8 +20,14 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   /** GET products from the server */
-  getProducts(filter?: ProductFilter): Observable<Product[]> {
+  getProducts(lazyLoadEvent?: LazyLoadEvent, filter?: ProductFilter): Observable<Product[]> {
     let params = new HttpParams();
+    if (lazyLoadEvent && typeof lazyLoadEvent.first !== 'undefined' && lazyLoadEvent.rows) {
+      params = params.set('page', lazyLoadEvent.first / lazyLoadEvent.rows);
+    }
+    if (lazyLoadEvent && lazyLoadEvent.rows) {
+      params = params.set('size', lazyLoadEvent.rows);
+    }
     if (filter && filter.name) {
       params = params.set('name.contains', filter.name);
     }
@@ -32,6 +39,22 @@ export class ProductService {
       .pipe(
         map(products => products.map(product => this.convertFromServer(product))),
         catchError(this.handleError<Product[]>('getProducts', []))
+      );
+  }
+
+  /** GET products count from the server */
+  getProductsCount(filter?: ProductFilter): Observable<number> {
+    let params = new HttpParams();
+    if (filter && filter.name) {
+      params = params.set('name.contains', filter.name);
+    }
+    if (filter && filter.category) {
+      params = params.set('category.equals', filter.category);
+    }
+
+    return this.http.get<number>(`${this.productsUrl}/count`, { params })
+      .pipe(
+        catchError(this.handleError<number>('getProductsCount', 0))
       );
   }
 

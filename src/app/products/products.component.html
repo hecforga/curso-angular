@@ -7,10 +7,21 @@
       <button pButton pRipple label="Eliminar selección" icon="pi pi-trash" class="p-button-danger"
         (click)="deleteSelectedProducts($event)" [disabled]="!selectedProducts || !selectedProducts.length"></button>
     </ng-template>
+    <ng-template pTemplate="right">
+      <p-dropdown
+        [options]="refreshIntervalOptions"
+        optionValue="value"
+        optionLabel="label"
+        name="refreshInterval"
+        [ngModel]="refreshInterval"
+        (ngModelChange)="onRefreshIntervalChange($event)"
+      ></p-dropdown>
+    </ng-template>
   </p-toolbar>
 
-  <p-table [value]="products" [rows]="10" [paginator]="true" [(selection)]="selectedProducts" [rowHover]="true"
-    dataKey="id" currentPageReportTemplate="{first} - {last} de {totalRecords} coches" [showCurrentPageReport]="true">
+  <p-table [value]="products" [rows]="2" [paginator]="true" [(selection)]="selectedProducts" [rowHover]="true"
+    dataKey="id" currentPageReportTemplate="{first} - {last} de {totalRecords} coches" [showCurrentPageReport]="true"
+    [lazy]="true" (onLazyLoad)="loadProducts($event)" [totalRecords]="totalRecords">
     <ng-template pTemplate="caption">
       <form class="p-d-flex p-ai-center p-jc-between" autocomplete="off">
         <h5 class="p-m-0">Filtros</h5>

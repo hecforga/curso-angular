@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
+import { combineLatest, Subscription, timer } from 'rxjs';
 
 import { Product, ProductFilter } from '../product';
 import { ProductService } from '../product.service';
@@ -10,12 +11,15 @@ import { ProductService } from '../product.service';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
   products: Product[] = [];
 
   selectedProducts: Product[] = [];
 
-  defaultPotionFilter: ProductFilter = {
+  totalRecords = 0;
+  lazyLoadEvent!: LazyLoadEvent;
+
+  defaultProductFilter: ProductFilter = {
     name: '',
     category: ''
   };
@@ -23,17 +27,44 @@ export class ProductsComponent implements OnInit {
 
   categoryOptions = ['Monovolumen', 'SUV', 'Turismo', 'Deportivo', 'Berlina', 'Pick-up'];
 
+  refreshIntervalOptions = [{
+    value: 5000,
+    label: 'Refrescar cada 5 segundos'
+  }, {
+    value: 10000,
+    label: 'Refrescar cada 10 segundos'
+  }, {
+    value: 30000,
+    label: 'Refrescar cada 30 segundos'
+  }];
+  refreshInterval = 5000;
+  refreshIntervalSubscription!: Subscription;
+
   constructor(private productService: ProductService, private router: Router, private confirmationService: ConfirmationService) {
     this.resetFilter();
   }
 
   ngOnInit(): void {
-    this.getProducts();
+    this.refreshIntervalSubscription = timer(this.refreshInterval, this.refreshInterval).subscribe(() => {
+      this.getProducts();
+    });
   }
 
-  getProducts(): void {
-    this.productService.getProducts(this.productFilter)
-      .subscribe(products => this.products = products);
+  ngOnDestroy(): void {
+    this.refreshIntervalSubscription.unsubscribe();
+  }
+
+  onRefreshIntervalChange(refreshInterval: number): void {
+    this.refreshInterval = refreshInterval;
+    this.refreshIntervalSubscription.unsubscribe();
+    this.refreshIntervalSubscription = timer(0, this.refreshInterval).subscribe(() => {
+      this.getProducts();
+    });
+  }
+
+  loadProducts(event: LazyLoadEvent) {
+    this.lazyLoadEvent = event;
+    this.getProducts();
   }
 
   edit(product: Product): void {
@@ -88,8 +119,17 @@ export class ProductsComponent implements OnInit {
     return this.productService.getInventoryStatus(product);
   }
 
-  private resetFilter(): void {
-    this.productFilter =  { ...this.defaultPotionFilter };
+  private getProducts(): void {
+    combineLatest([
+      this.productService.getProducts(this.lazyLoadEvent, this.productFilter),
+      this.productService.getProductsCount(this.productFilter),
+    ]).subscribe(([products, productsCount]) => {
+      this.totalRecords = productsCount;
+      this.products = products;
+    });
   }
 
+  private resetFilter(): void {
+    this.productFilter =  { ...this.defaultProductFilter };
+  }
 }
